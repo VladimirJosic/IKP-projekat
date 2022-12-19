@@ -14,21 +14,13 @@
 
 int InitializeWindowsSockets();
 
-int __cdecl main(void) //int argc, char **argv
+int __cdecl main(void)
 {
     // socket used to communicate with server
     SOCKET connectSocket = INVALID_SOCKET;
     // variable used to store function return value
     int iResult;
-    char *messageToSend = "this is a test";
-
-    // Validate the parameters
-    // if (argc != 2)
-    // {
-    //     printf("usage: %s server-name\n", argv[0]);
-    //     getch();
-    //     return 1;
-    // }
+    char messageToSend[256];
 
     if(InitializeWindowsSockets() == -1)
     {
@@ -55,18 +47,24 @@ int __cdecl main(void) //int argc, char **argv
         WSACleanup();
     }
     
-    // Send message with null terminator included
-    iResult = send(connectSocket, messageToSend, (int)strlen(messageToSend) + 1, 0);
-    if (iResult == SOCKET_ERROR)
-    {
-        printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(connectSocket);
-        WSACleanup();
-        getch();
-        return 1;
-    }
+    do{
+        printf("Unesi poruku za slanje: ");
+        fgets(messageToSend, sizeof(messageToSend), stdin);
+        strtok(messageToSend, "\n");
+        // Send message with null terminator included
+        iResult = send(connectSocket, messageToSend, (int)strlen(messageToSend) + 1, 0);
+        if (iResult == SOCKET_ERROR)
+        {
+            printf("send failed with error: %d\n", WSAGetLastError());
+            closesocket(connectSocket);
+            WSACleanup();
+            getch();
+            return 1;
+        }
 
-    printf("Bytes Sent: %ld\n", iResult);
+        printf("Bytes Sent: %ld\n", iResult);
+
+    }while(1);
 
     closesocket(connectSocket);
     WSACleanup();

@@ -102,7 +102,7 @@ int  main(void)
             iResult = recv(acceptedSocket, recvbuf, DEFAULT_BUFLEN, 0);
             if (iResult > 0)
             {
-                printf("Message received from client: %s.\n", recvbuf);
+                printf("Message received from client: %s\n", recvbuf);
             }
             else if (iResult == 0)
             {
