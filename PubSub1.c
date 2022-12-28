@@ -10,9 +10,17 @@
 #define DEFAULT_PORT "27016"
 
 int InitializeWindowsSockets();
+int TcpConnectionServer();
 
 int  main(void) 
 {
+    TcpConnectionServer();
+
+    return 0;
+
+}
+
+int TcpConnectionServer(){
     // Socket used for listening for new clients 
     SOCKET listenSocket = INVALID_SOCKET;
     // Socket used for communication with client
@@ -135,9 +143,7 @@ int  main(void)
     closesocket(listenSocket);
     closesocket(acceptedSocket);
     WSACleanup();
-
     return 0;
-
 }
 
 int InitializeWindowsSockets()

@@ -13,10 +13,17 @@
 #define DEFAULT_PORT 27016
 
 int InitializeWindowsSockets();
+int TcpConnectionClient();
 
 int __cdecl main(void)
 {
-    // socket used to communicate with server
+   TcpConnectionClient();
+    
+    return 0;
+}
+
+int TcpConnectionClient(){
+ // socket used to communicate with server
     SOCKET connectSocket = INVALID_SOCKET;
     // variable used to store function return value
     int iResult;
@@ -70,11 +77,9 @@ int __cdecl main(void)
     WSACleanup();
 
     getch();
-    
     return 0;
+
 }
-
-
 
 
 int InitializeWindowsSockets()
