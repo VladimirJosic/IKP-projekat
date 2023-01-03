@@ -1,25 +1,14 @@
-#define _WIN32_WINNT 0x0501
+#include "Common/PubSub.h"
 
-#include <ws2tcpip.h>
-#include <stdlib.h>
-#include <stdio.h>
+#define PUBSUB_PORT1 "27016"
 
-#pragma comment(lib, "Ws2_32.lib")
-
-#define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27016"
-
-int InitializeWindowsSockets();
-
-int  main(void) 
+int main(void) 
 {
-    // Socket used for listening for new clients 
-    SOCKET listenSocket = INVALID_SOCKET;
-    // Socket used for communication with client
+    SOCKET listenSocketPublisher = INVALID_SOCKET;
     SOCKET acceptedSocket = INVALID_SOCKET;
-    // variable used to store function return value
+
     int iResult;
-    // Buffer used for storing incoming data
+
     char recvbuf[DEFAULT_BUFLEN];
 
     if(InitializeWindowsSockets() == -1)
@@ -27,55 +16,17 @@ int  main(void)
 		return 1;
     }
 
-    // Prepare address information structures
-    struct addrinfo *resultingAddress = NULL;
-    struct addrinfo hints;
-
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_INET;       // IPv4 address
-    hints.ai_socktype = SOCK_STREAM; // Provide reliable data streaming
-    hints.ai_protocol = IPPROTO_TCP; // Use TCP protocol
-    hints.ai_flags = AI_PASSIVE;     // 
-
-    // Resolve the server address and port
-    iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &resultingAddress);
-    if ( iResult != 0 )
+    listenSocketPublisher = InitializeListenSocket(PUBSUB_PORT1);
+    if (listenSocketPublisher == SOCKET_ERROR || listenSocketPublisher == INVALID_SOCKET )
     {
-        printf("getaddrinfo failed with error: %d\n", iResult);
-        WSACleanup();
         return 1;
     }
 
-    // Create a SOCKET for connecting to server
-    listenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (listenSocket == INVALID_SOCKET)
-    {
-        printf("socket failed with error: %ld\n", WSAGetLastError());
-        freeaddrinfo(resultingAddress);
-        WSACleanup();
-        return 1;
-    }
-
-    // Setup the TCP listening socket - bind port number and local address to socket
-    iResult = bind( listenSocket, resultingAddress->ai_addr, (int)resultingAddress->ai_addrlen);
-    if (iResult == SOCKET_ERROR)
-    {
-        printf("bind failed with error: %d\n", WSAGetLastError());
-        freeaddrinfo(resultingAddress);
-        closesocket(listenSocket);
-        WSACleanup();
-        return 1;
-    }
-
-    // Since we don't need resultingAddress any more, free it
-    freeaddrinfo(resultingAddress);
-
-    // Set listenSocket in listening mode
-    iResult = listen(listenSocket, SOMAXCONN);
+    iResult = listen(listenSocketPublisher, SOMAXCONN);
     if (iResult == SOCKET_ERROR)
     {
         printf("listen failed with error: %d\n", WSAGetLastError());
-        closesocket(listenSocket);
+        closesocket(listenSocketPublisher);
         WSACleanup();
         return 1;
     }
@@ -83,15 +34,11 @@ int  main(void)
 
     do
     {
-        // Wait for clients and accept client connections.
-        // Returning value is acceptedSocket used for further
-        // Client<->Server communication. This version of
-        // server will handle only one client.
-        acceptedSocket = accept(listenSocket, NULL, NULL);
+
+        acceptedSocket = accept(listenSocketPublisher, NULL, NULL);
         if (acceptedSocket == INVALID_SOCKET)
         {
             printf("accept failed with error: %d\n", WSAGetLastError());
-            closesocket(listenSocket);
             WSACleanup();
             return 1;
         }
@@ -132,22 +79,10 @@ int  main(void)
         WSACleanup();
         return 1;
     }
-    closesocket(listenSocket);
+    closesocket(listenSocketPublisher);
     closesocket(acceptedSocket);
     WSACleanup();
 
     return 0;
 
-}
-
-int InitializeWindowsSockets()
-{
-    WSADATA wsaData;
-	// Initialize windows sockets library for this process
-    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
-    {
-        printf("WSAStartup failed with error: %d\n", WSAGetLastError());
-        return -1;
-    }
-	return 0;
 }
