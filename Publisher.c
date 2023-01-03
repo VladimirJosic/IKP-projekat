@@ -1,7 +1,24 @@
-#include "Common/Publisher.h"
+#define WIN32_LEAN_AND_MEAN
+
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <conio.h>
+
+#pragma comment (lib, "Ws2_32.lib")
+
+#define DEFAULT_BUFLEN 512
+#define DEFAULT_PORT 27016
+
+int InitializeWindowsSockets();
 
 int __cdecl main(void)
 {
+    // socket used to communicate with server
+    SOCKET connectSocket = INVALID_SOCKET;
+    // variable used to store function return value
     int iResult;
     char topic[16];
     char messageToSend[256];
@@ -40,6 +57,25 @@ int __cdecl main(void)
 
     closesocket(connectSocket);
     WSACleanup();
+
+    getch();
     
     return 0;
+
+}
+
+
+
+
+int InitializeWindowsSockets()
+{
+    WSADATA wsaData;
+	// Initialize windows sockets library for this process
+    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
+    {
+        printf("WSAStartup failed with error: %d\n", WSAGetLastError());
+        getch();
+        return -1;
+    }
+	return 0;
 }

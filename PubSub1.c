@@ -2,9 +2,18 @@
 
 #define PUBSUB_PORT1 "27016"
 
-int main(void) 
+#pragma comment(lib, "Ws2_32.lib")
+
+#define DEFAULT_BUFLEN 512
+#define DEFAULT_PORT "27016"
+
+int InitializeWindowsSockets();
+
+int  main(void) 
 {
-    SOCKET listenSocketPublisher = INVALID_SOCKET;
+    // Socket used for listening for new clients 
+    SOCKET listenSocket = INVALID_SOCKET;
+    // Socket used for communication with client
     SOCKET acceptedSocket = INVALID_SOCKET;
 
     int iResult;
@@ -82,7 +91,5 @@ int main(void)
     closesocket(listenSocketPublisher);
     closesocket(acceptedSocket);
     WSACleanup();
-
     return 0;
-
 }
