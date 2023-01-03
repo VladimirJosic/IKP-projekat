@@ -1,7 +1,7 @@
 #pragma once
 #define _WIN32_WINNT 0x0501
 
-#include "Queue.h"
+//#include "Queue.h"
 
 #include <ws2tcpip.h>
 #include <stdlib.h>
@@ -11,9 +11,20 @@
 
 #define DEFAULT_BUFLEN 512
 
-
+int InitializeWindowsSockets()
+{
+    WSADATA wsaData;
+	// Initialize windows sockets library for this process
+    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
+    {
+        printf("WSAStartup failed with error: %d\n", WSAGetLastError());
+        return -1;
+    }
+	return 0;
+}
 
 SOCKET InitializeListenSocket(const char* port) {
+
     SOCKET listenSocket = INVALID_SOCKET;
 
     struct addrinfo *resultingAddress = NULL;
@@ -64,20 +75,4 @@ SOCKET InitializeListenSocket(const char* port) {
 	// 	return INVALID_SOCKET;
 	// }
 	// return listenSocket;
-}
-
-
-
-
-
-int InitializeWindowsSockets()
-{
-    WSADATA wsaData;
-	// Initialize windows sockets library for this process
-    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
-    {
-        printf("WSAStartup failed with error: %d\n", WSAGetLastError());
-        return -1;
-    }
-	return 0;
 }
