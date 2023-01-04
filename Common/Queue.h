@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include<stdio.h>
 #include <stdlib.h>
 #include "Structs.h"
@@ -53,9 +54,10 @@ void ShowQueue(QUEUE* q) {
 
 }
 
-void ClearQueue(QUEUE *q) {
+void ClearQueue(QUEUE* q) {
 	PORUKA retVal;
 	while (Dequeue(q, &retVal))
 	{
 		continue;
 	}
+}

@@ -1,0 +1,3 @@
+﻿  PubSub1.cpp
+C:\Users\Nex\Desktop\qweqwew\IKP-projekat\PubSub1\PubSub1.cpp(12,10): warning C4101: 'recvbuf': unreferenced local variable
+  PubSub1.vcxproj -> C:\Users\Nex\Desktop\qweqwew\IKP-projekat\x64\Debug\PubSub1.exe

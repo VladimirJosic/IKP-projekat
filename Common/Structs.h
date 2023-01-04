@@ -1,10 +1,11 @@
 #pragma once
+#pragma once
 #include <WinSock2.h>
 #define max_topic 15
 
 typedef struct uticnica {
 	SOCKET acceptedSocket;
-	struct uticnica *next;
+	struct uticnica* next;
 }UTICNICA;
 
 typedef struct poruka {
@@ -13,17 +14,17 @@ typedef struct poruka {
 } PORUKA;
 
 typedef struct queue {
-	struct node *front;
-	struct node *back;
+	struct node* front;
+	struct node* back;
 } QUEUE;
 
 typedef struct node {
 	struct poruka data;
-	struct node *next;
+	struct node* next;
 } NODE;
 
 typedef struct subscribers {
 	char topic[max_topic];
-	UTICNICA * acceptedSocketsForTopic;
-	struct subscribers *next;
+	UTICNICA* acceptedSocketsForTopic;
+	struct subscribers* next;
 }subscribers;

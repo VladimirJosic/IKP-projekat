@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #define _WINSOCK_DEPRECATED_NO_WARNINGS 
 #define WIN32_LEAN_AND_MEAN
 
@@ -20,10 +21,10 @@ SOCKET connectSocket = INVALID_SOCKET;
 
 int InitializeWindowsSockets();
 int Connect();
-int Publish(void * topic, void * messageToSend);
+int Publish(void* topic, void* messageToSend);
 
 
-int Connect(){
+int Connect() {
 
     connectSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (connectSocket == INVALID_SOCKET)
@@ -47,10 +48,10 @@ int Connect(){
     return 0;
 }
 
-int Publish(void * topic, void * messageToSend){
+int Publish(void* topic, void* messageToSend) {
     PORUKA poruka;
-    strcpy(poruka.topic, (char*)topic);
-    strcpy(poruka.text, (char*)messageToSend);
+    strcpy_s(poruka.topic, (char*)topic);
+    strcpy_s(poruka.text, (char*)messageToSend);
 
     int iResult = send(connectSocket, (char*)&poruka, (int)sizeof(PORUKA), 0);
     if (iResult == SOCKET_ERROR)
@@ -66,11 +67,11 @@ int Publish(void * topic, void * messageToSend){
 int InitializeWindowsSockets()
 {
     WSADATA wsaData;
-	// Initialize windows sockets library for this process
-    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
+    // Initialize windows sockets library for this process
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
     {
         printf("WSAStartup failed with error: %d\n", WSAGetLastError());
         return -1;
     }
-	return 0;
+    return 0;
 }
