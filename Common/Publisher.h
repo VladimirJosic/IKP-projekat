@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #define _WINSOCK_DEPRECATED_NO_WARNINGS 
 #define WIN32_LEAN_AND_MEAN
 
@@ -11,18 +10,13 @@
 #include <conio.h>
 #include "Structs.h"
 
-
+#include "Connection.h"
 #pragma comment(lib, "ws2_32.lib")
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT 27016
 
 SOCKET connectSocket = INVALID_SOCKET;
-
-int InitializeWindowsSockets();
-int Connect();
-int Publish(void* topic, void* messageToSend);
-
 
 int Connect() {
 
@@ -34,7 +28,7 @@ int Connect() {
         return 1;
     }
 
-    struct sockaddr_in serverAddress;
+    sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
     serverAddress.sin_port = htons(DEFAULT_PORT);
@@ -43,6 +37,7 @@ int Connect() {
         printf("Unable to connect to server.\n");
         closesocket(connectSocket);
         WSACleanup();
+        return 1;
     }
 
     return 0;
@@ -62,16 +57,4 @@ int Publish(void* topic, void* messageToSend) {
         return -1;
     }
     return iResult;
-}
-
-int InitializeWindowsSockets()
-{
-    WSADATA wsaData;
-    // Initialize windows sockets library for this process
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-    {
-        printf("WSAStartup failed with error: %d\n", WSAGetLastError());
-        return -1;
-    }
-    return 0;
 }

@@ -1,7 +1,6 @@
 #include "../Common/PubSub.h"
 #include <conio.h>
 
-#define PUBSUB_PORT1 "27016"
 
 int main(void)
 {
@@ -9,7 +8,7 @@ int main(void)
 
     int iResult;
 
-    char recvbuf[DEFAULT_BUFLEN];
+    //char recvbuf[DEFAULT_BUFLEN];
 
     if (InitializeWindowsSockets() == -1)
     {
@@ -30,14 +29,20 @@ int main(void)
         WSACleanup();
         return 1;
     }
+
+    if (Connect())
+    {
+        return 1;
+    }
+
     printf("Server initialized, waiting for clients.\n");
 
     InitAllCriticalSections();
     CreateSemaphores();
     CreateThreadsEngine1(&listenSocketPublisher);
 
-    if (!t1) {
-        ReleaseSemaphore(FinishSignal, 1, NULL);
+    if (!t1 || !t2 || !t3) {
+        ReleaseSemaphore(FinishSignal, 3, NULL);
     }
 
     while (1) {
@@ -45,7 +50,7 @@ int main(void)
         if (_kbhit()) {
             char c = _getch();
             if (c == 'q') {
-                ReleaseSemaphore(FinishSignal, 1, NULL);
+                ReleaseSemaphore(FinishSignal, 3, NULL);
                 break;
             }
         }
@@ -53,6 +58,12 @@ int main(void)
 
     if (t1) {
         WaitForSingleObject(t1, INFINITE);
+    }
+    if (t2) {
+        WaitForSingleObject(t2, INFINITE);
+    }
+    if (t3) {
+        WaitForSingleObject(t3, INFINITE);
     }
 
     DeleteAllCriticalSections();

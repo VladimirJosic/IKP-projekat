@@ -1,5 +1,6 @@
 #include "../Common/Publisher.h"
 
+
 int __cdecl main(void)
 {
     int iResult;
