@@ -21,7 +21,7 @@ int InitializeWindowsSockets()
     return 0;
 }
 
-SOCKET InitializeListenSocket(const char* port) {
+SOCKET InitializeListenSocket(const char* port, unsigned long mode) {
 
     SOCKET listenSocket = INVALID_SOCKET;
 
@@ -66,7 +66,7 @@ SOCKET InitializeListenSocket(const char* port) {
     freeaddrinfo(resultingAddress);
 
     //stavi u neblokirjauci rezim
-    unsigned long mode = 1;
+    //unsigned long mode = 0;
     iResult = ioctlsocket(listenSocket, FIONBIO, &mode);
     if (iResult == -1) {
         printf("ioctlsocket failed with error: %ld\n", iResult);

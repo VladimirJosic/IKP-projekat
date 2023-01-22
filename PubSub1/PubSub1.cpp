@@ -1,4 +1,4 @@
-#include "../Common/PubSub.h"
+#include "../Common/PubSub1.h"
 #include <conio.h>
 
 
@@ -15,7 +15,7 @@ int main(void)
         return 1;
     }
 
-    listenSocketPublisher = InitializeListenSocket(PUBSUB_PORT1);
+    listenSocketPublisher = InitializeListenSocket(PUBSUB_PORT1,1);
     if (listenSocketPublisher == SOCKET_ERROR || listenSocketPublisher == INVALID_SOCKET)
     {
         return 1;

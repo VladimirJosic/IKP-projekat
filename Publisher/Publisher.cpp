@@ -37,6 +37,30 @@ int __cdecl main(void)
 
     } while (1);
 
+    /*char topic2[16];
+    char messageToSend2[256];
+    int i = 0;
+    strcpy_s(topic, "qwe");
+    strcpy_s(messageToSend, "qqqqqqqq");
+    strcpy_s(topic2, "eee");
+    strcpy_s(messageToSend2, "eeeeeeeee");
+    while (i < 250)
+    {
+        i++;
+        iResult = Publish((void*)topic, (void*)messageToSend);
+        if (iResult == -1)
+            break;
+
+        printf("Bytes Sent: %ld\n", iResult);
+        iResult = Publish((void*)topic2, (void*)messageToSend2);
+        if (iResult == -1)
+            break;
+
+        printf("Bytes Sent: %ld\n", iResult);
+        printf("Broj poruka: %d\n", i*2);
+    }*/
+
+
     closesocket(connectSocket);
     WSACleanup();
 

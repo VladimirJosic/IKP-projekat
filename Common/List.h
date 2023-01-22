@@ -56,6 +56,20 @@ bool RemoveSocketFromList(uticnica** head, SOCKET sock) {
 	return true;
 }
 
+bool FindInList(uticnica** head, SOCKET s) {
+
+	uticnica* temp = NULL;
+	uticnica* current = *head;
+	while (current != NULL) {
+		if (current->acceptedSocket == s)
+			return true;
+		current = current->next;
+	}
+
+	return false;
+}
+
+
 void deleteList(uticnica** head) {
 	uticnica* temp = NULL;
 	uticnica* current = *head;
@@ -70,9 +84,7 @@ void deleteList(uticnica** head) {
 }
 
 void ZatvoriSveSocketeZaListu(uticnica* lista) {
-	//uticnica * trenutni = lista; // trenutni je head tj. pocetak liste
 	int iResult;
-	//Ugasi svaki socket;
 	while (lista != NULL) {
 		iResult = shutdown(lista->acceptedSocket, SD_SEND);
 		if (iResult == SOCKET_ERROR)
@@ -80,10 +92,7 @@ void ZatvoriSveSocketeZaListu(uticnica* lista) {
 			printf("shutdown ZATVORI SVE SOCKETE FUNKCIJA  failed with error: %d\n", WSAGetLastError());
 			closesocket(lista->acceptedSocket);
 			WSACleanup();
-			//return 1;
-			//continue;
 		}
-		//zatvori svaki socket publisheras ili subscribera
 		closesocket(lista->acceptedSocket);
 		lista = lista->next;
 	}

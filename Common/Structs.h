@@ -13,15 +13,6 @@ typedef struct poruka {
 	char text[256];
 } PORUKA;
 
-typedef struct queue {
-	struct node* front;
-	struct node* back;
-} QUEUE;
-
-typedef struct node {
-	struct poruka data;
-	struct node* next;
-} NODE;
 
 typedef struct subscribers {
 	char topic[max_topic];

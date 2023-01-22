@@ -20,7 +20,12 @@
       "ProjectGuid": "936d0b39-365b-47ff-84e8-105b909a23fb",
       "DisplayName": "PubSub2",
       "ColorIndex": 3
+    },
+    "a4536f5c-c379-43d4-97b4-0c6208cc06bc": {
+      "ProjectGuid": "a4536f5c-c379-43d4-97b4-0c6208cc06bc",
+      "DisplayName": "Subscriber",
+      "ColorIndex": 4
     }
   },
-  "NextColorIndex": 4
+  "NextColorIndex": 5
 }
